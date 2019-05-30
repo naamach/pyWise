@@ -1,6 +1,4 @@
-from configparser import ConfigParser
 import os
-import logging
 import time
 from pywise import calframes, utils
 from pywise.keywords import get_key_name, get_key_val
@@ -8,51 +6,13 @@ import ccdproc
 import numpy as np
 from astropy import units as u
 import datetime
-
-config = ConfigParser(inline_comment_prefixes=';')
-config.read('config.ini')
+from pywise.utils import get_config, init_log, close_log
 
 
-def init_log(filename="log.log"):
-    log_path = config.get('LOG', 'PATH')  # log file path
-    console_log_level = config.get('LOG', 'CONSOLE_LEVEL')  # logging level
-    file_log_level = config.get('LOG', 'FILE_LEVEL')  # logging level
-
-    # create log folder
-    if not os.path.exists(log_path):
-        os.makedirs(log_path)
-
-    log = logging.getLogger(__name__)
-    log.setLevel(logging.DEBUG)
-
-    # console handler
-    h = logging.StreamHandler()
-    h.setLevel(logging.getLevelName(console_log_level))
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S")
-    h.setFormatter(formatter)
-    log.addHandler(h)
-
-    # log file handler
-    h = logging.FileHandler(log_path + filename + ".log", "w", encoding=None, delay="true")
-    h.setLevel(logging.getLevelName(file_log_level))
-    formatter = logging.Formatter(
-        "%(asctime)s - %(levelname)s [%(filename)s:%(lineno)s]: %(message)s", "%Y-%m-%d %H:%M:%S")
-    h.setFormatter(formatter)
-    log.addHandler(h)
-
-    return log
-
-
-def close_log(log):
-    handlers = list(log.handlers)
-    for h in handlers:
-        log.removeHandler(h)
-        h.flush()
-        h.close()
-
-
-def reduce_night(year=datetime.date.today().year, month=datetime.date.today().month, day=datetime.date.today().day, telescope="C28"):
-    log = init_log(time.strftime("%Y%m%d_%H%M%S", time.gmtime()))
+def reduce_night(year=datetime.date.today().year, month=datetime.date.today().month, day=datetime.date.today().day,
+                 telescope="C28", config_file="config.ini"):
+    config = get_config(config_file)
+    log = init_log(time.strftime("%Y%m%d_%H%M%S", time.gmtime()), config_file)
 
     t = datetime.date(year, month, day)
     t_str = datetime.date.strftime(t, format="%Y%m%d")
@@ -64,7 +24,7 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
         return
 
     log.info(f"""Creating {telescope} master calibration frames for {t_str}...""")
-    calframes.create_masters(year, month, day, telescope, log=log)
+    calframes.create_masters(year, month, day, telescope, log=log, config_file=config_file)
 
     imlist = ccdproc.ImageFileCollection(im_path, keywords='*')
     files = imlist.files_filtered(imagetyp="LIGHT")
@@ -92,7 +52,8 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
         filters = np.unique(imlist.summary["filter"])
         log.debug(f"{filters}")
         for filt in filters:
-            bias_file, dark_file, flat_file = calframes.get_calframes(year, month, day, filt, ccd_str, telescope=telescope, instrument=instrument, log=log)
+            bias_file, dark_file, flat_file = calframes.get_calframes(year, month, day, filt, ccd_str, telescope=telescope,
+                                                                      instrument=instrument, log=log, config_file=config_file)
             if (not bias_file) or (not dark_file) or (not flat_file):
                 log.warning(f"No calibration frames found, skipping.")
                 continue

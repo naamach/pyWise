@@ -81,16 +81,23 @@ To reduce, for example, the images taken by the C28 telescope on 2019 May 29, ru
 $ wise_reduce -f 20190529 C28
 ```
 
+This is assuming the `config.ini` file is in the current folder. Otherwise you can specify the path to the config file:
+
+```
+$ wise_reduce -f 20190529 -c /path/to/config.ini C28
+```
+
 To reduce all the images taken by the C28 between 2019 May 29 and May 30, run:
 
 ```
-$ wise_reduce -f 20190529 -t 20190530 C28
+$ wise_reduce -f 20190529 -t 20190530 -c /path/to/config.ini C28
 ```
 
 General usage:
 
 ```
-usage: wise_reduce [-h] -f YYYYMMDD [-t YYYYMMDD] {1m,C28,C18}
+usage: wise_reduce [-h] -f YYYYMMDD [-t YYYYMMDD] [-c config_file]
+                   {1m,C28,C18}
 
 Reduce Wise Observatory images.
 
@@ -103,6 +110,7 @@ optional arguments:
                         date to reduce
   -t YYYYMMDD, --to YYYYMMDD
                         optional second date to define a date range to reduce
-
+  -c config_file, --config config_file
+                        path to config.ini file (default: config.ini)
 ```
 

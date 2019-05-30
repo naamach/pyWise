@@ -128,14 +128,14 @@ def create_master_flat(imlist, bias=[], dark=[], filt="", filename="mflat", save
     return
 
 
-def create_masters(year=datetime.date.today().year, month=datetime.date.today().month, day=datetime.date.today().day, telescope="C28", log=None):
+def create_masters(year=datetime.date.today().year, month=datetime.date.today().month, day=datetime.date.today().day,
+                   telescope="C28", log=None, config_file="config.ini"):
     assert(telescope in ["C28", "C18"]), f"Not implemented for {telescope} yet!"
 
     if log is None:
         log = logging.getLogger(__name__)
 
-    config = ConfigParser(inline_comment_prefixes=';')
-    config.read('config.ini')
+    config = utils.get_config(config_file)
 
     t = datetime.date(year, month, day)
     t_str = datetime.date.strftime(t, format="%Y%m%d")
@@ -226,12 +226,11 @@ def create_masters(year=datetime.date.today().year, month=datetime.date.today().
                            is_overwrite=is_overwrite, max_num_frames=max_num_frames, log=log, **keys)
 
 
-def get_calframes(year, month, day, filt, ccd_str, telescope="C28", instrument="FLI-PL16801", log=None):
+def get_calframes(year, month, day, filt, ccd_str, telescope="C28", instrument="FLI-PL16801", log=None, config_file="config.ini"):
     if log is None:
         log = logging.getLogger(__name__)
 
-    config = ConfigParser(inline_comment_prefixes=';')
-    config.read('config.ini')
+    config = utils.get_config(config_file)
 
     t = datetime.date(year, month, day)
     t_str = datetime.date.strftime(t, format="%Y%m%d")

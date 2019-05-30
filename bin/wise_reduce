@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 from pywise.wise import reduce_night
-import numpy as np
 import sys
 import getopt
 import datetime
+
 
 def usage():
     import argparse
@@ -15,6 +15,7 @@ def usage():
     parser.add_argument("-f", "--from", metavar="YYYYMMDD", help="date to reduce", required=True)
     parser.add_argument("-t", "--to", metavar="YYYYMMDD", help="optional second date to define a date range to reduce")
     parser.add_argument("telescope", help="telescope", choices=["1m", "C28", "C18"])
+    parser.add_argument("-c", "--config", metavar="config_file", help="path to config.ini file (default: config.ini)", default="config.ini")
     args = parser.parse_args()
 
 
@@ -25,13 +26,14 @@ def daterange(start_date, end_date):
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "f:t:h", ["from=", "to=", "help"])
+        opts, args = getopt.getopt(argv, "f:t:c:h", ["from=", "to=", "config=", "help"])
     except getopt.GetoptError as err:
         print(err)
         usage()
         sys.exit(2)
 
     d2 = None
+    config_file = "config.ini"
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
@@ -40,16 +42,18 @@ def main(argv):
             d1 = datetime.datetime.strptime(arg, "%Y%m%d")
         elif opt in ("-t", "--to"):
             d2 = datetime.datetime.strptime(arg, "%Y%m%d")
+        elif opt in ("-c", "--config"):
+            config_file = arg
 
     telescope = args[-1]
 
     if d2:
         for day in daterange(d1, d2):
             print(day)
-            reduce_night(day.year, day.month, day.day, telescope)
+            reduce_night(day.year, day.month, day.day, telescope, config_file=config_file)
     else:
         print(d1)
-        reduce_night(d1.year, d1.month, d1.day, telescope)
+        reduce_night(d1.year, d1.month, d1.day, telescope, config_file=config_file)
 
 
 if __name__ == '__main__':
