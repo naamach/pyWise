@@ -6,7 +6,7 @@ Image reduction pipeline for the Wise Observatory.
 
 ### Prerequisites
 
-* `python 2.7` or above
+* `python 3.6` or above
 * `lxml`
 * `configparser`
 
