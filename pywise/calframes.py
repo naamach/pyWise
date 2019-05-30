@@ -1,7 +1,6 @@
 import numpy as np
 from astropy import units as u
 import ccdproc
-from configparser import ConfigParser
 import os
 import datetime
 import glob

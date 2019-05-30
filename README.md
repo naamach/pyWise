@@ -7,14 +7,16 @@ Image reduction pipeline for the Wise Observatory.
 ### Prerequisites
 
 * `python 3.6` or above
-* `lxml`
+* `astropy`
 * `configparser`
+* `ccdproc`
+* `numpy`
 
 ### Installing
 
 Create and activate a `conda` environment with the necessary modules:
 ```
-$ conda create -n wise lxml configparser
+$ conda create -n wise astropy configparser ccdproc numpy python=3.7.1
 $ source activate wise
 ```
 Install the `pyWise` package:
@@ -117,6 +119,6 @@ optional arguments:
 ## Outflow of `pywise.wise.reduce_night`
 
 1. Get a list of images from the date and telescope requested (the path to the image folder is defined in the `config.ini` file).
-1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`)
+1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`).
 1. For each science image, find the nearest available relevant calibration frames, subtract bias, subtract dark, and correct flat field.
 1. Save the reduced image to the reduced image subfolder, in the format `<object>_<JD>_<filter>_<telescope>.fits`.
