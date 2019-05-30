@@ -17,5 +17,6 @@ setup(name='pywise',
           'Intended Audience :: Science/Research',
           'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
           'Programming Language :: Python',
-          'Topic :: Scientific/Engineering :: Astronomy']
+          'Topic :: Scientific/Engineering :: Astronomy'],
+      scripts=['bin/wise_reduce']
       )

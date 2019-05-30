@@ -64,6 +64,8 @@ DIR_SUFFIX = c18  ; nightly folder name suffix
 
 ## Using `pyWise`
 
+### Directly from `python`
+
 To reduce, for example, the images taken by the C28 telescope on 2019 May 29, run:
 
 ```
@@ -71,4 +73,36 @@ from pywise import wise
 wise.reduce_night(2019, 5, 29, "C28")
 ```
 
+### Using the `wise_reduce` command
+
+To reduce, for example, the images taken by the C28 telescope on 2019 May 29, run in the terminal, while the relevant python environment is activated:
+
+```
+$ wise_reduce -f 20190529 C28
+```
+
+To reduce all the images taken by the C28 between 2019 May 29 and May 30, run:
+
+```
+$ wise_reduce -f 20190529 -t 20190530 C28
+```
+
+General usage:
+
+```
+usage: wise_reduce [-h] -f YYYYMMDD [-t YYYYMMDD] {1m,C28,C18}
+
+Reduce Wise Observatory images.
+
+positional arguments:
+  {1m,C28,C18}          telescope
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f YYYYMMDD, --from YYYYMMDD
+                        date to reduce
+  -t YYYYMMDD, --to YYYYMMDD
+                        optional second date to define a date range to reduce
+
+```
 
