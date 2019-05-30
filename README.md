@@ -116,7 +116,7 @@ optional arguments:
                         path to config.ini file (default: config.ini)
 ```
 
-## Outflow of `pywise.wise.reduce_night`
+## Outline of `pywise.wise.reduce_night`
 
 1. Get a list of images from the date and telescope requested (the path to the image folder is defined in the `config.ini` file).
 1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`).
