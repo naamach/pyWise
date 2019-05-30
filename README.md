@@ -119,6 +119,6 @@ optional arguments:
 ## Outline of `pywise.wise.reduce_night`
 
 1. Get a list of images from the date and telescope requested (the path to the image folder is defined in the `config.ini` file).
-1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`). Takes into account telescope, insturment, binning, subframe, and filter used.
+1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`). The function takes into account telescope, instrument, binning, subframe, and filter used.
 1. For each science image, find the nearest available relevant calibration frames, subtract bias, subtract dark, and correct flat field.
 1. Save the reduced image to the reduced image subfolder, in the format `<object>_<JD>_<filter>_<telescope>.fits`.
