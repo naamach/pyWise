@@ -66,6 +66,30 @@ DIR_SUFFIX = c18  ; nightly folder name suffix
 
 ## Using `pyWise`
 
+### Copying the images
+
+First, you need to download the images from `mizpe-bck`, and save them locally to the folder defined in the `PATH` parameter under `GENERAL` in the `config.ini` file.
+`pyWise` assumes a folder hierarchy similar to that of `mizpe-bck`, where there is a separate folder for each night for each telescope:
+
+```
+mizpe-bck
+   |
+   |-----20190531
+   |-----20190601
+   |
+   |-----C18backup
+            |
+            |-----20190531c18
+	    |-----20190601c18
+   |
+   |-----C28backup
+            |
+            |-----20190531c28
+	    |-----20190601c28
+
+```
+You should copy the relevant nightly folder to your computer using a similar structure.
+
 ### Directly from `python`
 
 To reduce, for example, the images taken by the C28 telescope on 2019 May 29, run:
@@ -119,6 +143,6 @@ optional arguments:
 ## Outline of `pywise.wise.reduce_night`
 
 1. Get a list of images from the date and telescope requested (the path to the image folder is defined in the `config.ini` file).
-1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`). The function takes into account telescope, instrument, binning, subframe, and filter used.
+1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`). The function takes into account the telescope, instrument, binning, subframe, and filter used.
 1. For each science image, find the nearest available relevant calibration frames, subtract bias, subtract dark, and correct flat field.
 1. Save the reduced image to the reduced image subfolder, in the format `<object>_<JD>_<filter>_<telescope>.fits`.
