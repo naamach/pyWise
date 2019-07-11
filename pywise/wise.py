@@ -86,7 +86,7 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
                         im.header.comments[get_key_name("rbi_delay", telescope)] = f"""JD corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}."""
                         log.warning(f"""Corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}.""")
 
-                jd = str(jd).replace(".", "_")
+                jd = str(jd.to_value()).replace(".", "_")
                 filename = f"{obj}_{jd}_{filt}_{telescope}"
 
                 file_exists = os.path.isfile(reduced_path + filename + ".fits")
