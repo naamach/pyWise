@@ -146,3 +146,7 @@ optional arguments:
 1. Create master calibration frames (bias, dark, flat) for this night (if raw calibration frames exist), and save them to the calibration frame archive (defined in `config.ini`). The function takes into account the telescope, instrument, binning, subframe, and filter used.
 1. For each science image, find the nearest available relevant calibration frames, subtract bias, subtract dark, and correct flat field.
 1. Save the reduced image to the reduced image subfolder, in the format `<object>_<JD>_<filter>_<telescope>.fits`.
+
+## Notes
+
+The FLI camera of the C28 telescope has a ~27s delay before each exposure in the "RBI flood" readout mode. As a result, the exposure actually starts 27s after the beginning of the exposure timestamp. `pyWise` corrects the `JD` keyword (and that keyword only) in the header of these images (and also in the JD that appears in the reduced image file name), to account for this delay (adding 27s to the original JD value). It then adds an `RBIDELAY` keyword with a value `TRUE` to the reduced image header.
