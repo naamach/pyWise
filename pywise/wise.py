@@ -83,7 +83,7 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
                         jd = jd + get_key_val("rbi_delay", telescope)
                         im.header[get_key_name("jd", telescope)] = jd.to_value()
                         im.header[get_key_name("rbi_delay", telescope)] = "TRUE"
-                        im.header.comments[get_key_name("rbi_delay", telescope)] = f"""JD corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}."""
+                        im.header.comments[get_key_name("rbi_delay", telescope)] = f"""Corrected JD by {get_key_val("rbi_delay", telescope)} of RBI flood delay."""
                         log.warning(f"""Corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}.""")
 
                 jd = str(jd.to_value()).replace(".", "_")
