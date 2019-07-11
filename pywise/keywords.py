@@ -52,9 +52,36 @@ def get_key_name(key, telescope):
         "y_subframe": "YORGSUBF",
     }
 
+    c18 = {
+        "ra": "RA",
+        "dec": "DEC",
+        "exptime": "EXPTIME",
+        "readout": "READOUTM",
+        "filter": "FILTER",
+        "image_type": "IMAGETYP",
+        "light": "LIGHT",
+        "jd": "JD",
+        "object": "OBJECT",
+        "airmass": "AIRMASS",
+        "naxis": "NAXIS",
+        "x_naxis": "NAXIS1",
+        "y_naxis": "NAXIS2",
+        "x_bin": "XBINNING",
+        "y_bin": "YBINNING",
+        "temperature": "CCD-TEMP",
+        "telescope": "TELESCOP",
+        "instrument": "INSTRUME",
+        "gain": "GAIN",
+        "readout_noise": "RDNOISE",
+        "flip": "FLIPSTAT",
+        "x_subframe": "XORGSUBF",
+        "y_subframe": "YORGSUBF",
+    }
+
     keys = {
         "1m": meter,
         "C28": c28,
+        "C18": c18,
     }
 
     return keys[telescope][key]
