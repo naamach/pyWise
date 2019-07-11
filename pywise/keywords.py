@@ -1,3 +1,5 @@
+from astropy import units as u
+
 def get_key_name(key, telescope):
     meter = {
         "ra": "RA",
@@ -50,6 +52,7 @@ def get_key_name(key, telescope):
         "flip": "FLIPSTAT",
         "x_subframe": "XORGSUBF",
         "y_subframe": "YORGSUBF",
+        "rbi_delay": "RBIDELAY",
     }
 
     c18 = {
@@ -94,12 +97,19 @@ def get_key_val(val, telescope):
 
     c28 = {
         "rbi": "8 MHz (RBI Flood)",
+        "rbi_delay": 27*u.s,
+        "light": "LIGHT"
+    }
+
+    c18 = {
+        "rbi": "8 MHz (RBI Flood)",
         "light": "LIGHT"
     }
 
     vals = {
         "1m": meter,
         "C28": c28,
+        "C18": c18,
     }
 
     return vals[telescope][val]

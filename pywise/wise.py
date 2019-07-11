@@ -76,7 +76,17 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
                 log.debug(f"{filename}")
 
                 obj = im.header[get_key_name("object", telescope)]
-                jd = str(im.header[get_key_name("jd", telescope)]).replace(".", "_")
+                jd = im.header[get_key_name("jd", telescope)]*u.day
+                # fix JD for RBI flood delay (C28):
+                if telescope == "C28":
+                    if im.header[get_key_name("readout", telescope)] == get_key_val("rbi", telescope):
+                        jd = jd + get_key_val("rbi_delay", telescope)
+                        im.header[get_key_name("jd", telescope)] = jd.to_value()
+                        im.header[get_key_name("rbi_delay", telescope)] = "TRUE"
+                        im.header.comments[get_key_name("rbi_delay", telescope)] = f"""JD corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}."""
+                        log.warning(f"""Corrected RBI flood delay of {get_key_val("rbi_delay", telescope)}.""")
+
+                jd = str(jd).replace(".", "_")
                 filename = f"{obj}_{jd}_{filt}_{telescope}"
 
                 file_exists = os.path.isfile(reduced_path + filename + ".fits")
