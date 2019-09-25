@@ -53,6 +53,7 @@ REDUCED_DIR = reduced ; reduced subfolder name
 MAX_DAY_SHIFT = 14 ; maximal number of days away to look for missing calibration frames
 PATH = /path/to/calibration_frames/  ; calibration frame archive
 OVERWRITE = False ; True - overwrite previously-created master calibration frames
+MIN_NUM_FRAMES = 5 ; minimal number of frames to combine (has to be an integer)
 MAX_NUM_FRAMES = -1 ; maximal number of frames to combine (to solve memory problems; has to be an integer, -1 = unlimited)
 
 [C28]

@@ -8,7 +8,7 @@ import logging
 from pywise import utils
 
 
-def create_master_bias(imlist, filename="mbias", save_uncertainty=False, max_num_frames=-1, log=None, **kwargs):
+def create_master_bias(imlist, filename="mbias", save_uncertainty=False, min_num_frames=5, max_num_frames=-1, log=None, **kwargs):
     if log is None:
         log = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def create_master_bias(imlist, filename="mbias", save_uncertainty=False, max_num
     if max_num_frames > 0:
         bias_list[max_num_frames:] = []
 
-    if len(bias_list) > 0:
+    if len(bias_list) >= min_num_frames:
         biases = ccdproc.Combiner(bias_list, dtype=np.float32)
         master_bias = biases.median_combine()
         if not save_uncertainty:
@@ -37,7 +37,7 @@ def create_master_bias(imlist, filename="mbias", save_uncertainty=False, max_num
     return master_bias
 
 
-def create_master_dark(imlist, bias=[], filename="mdark", save_uncertainty=False, max_num_frames=-1,
+def create_master_dark(imlist, bias=[], filename="mdark", save_uncertainty=False, min_num_frames=5, max_num_frames=-1,
                        log=None, **kwargs):
     if log is None:
         log = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ def create_master_dark(imlist, bias=[], filename="mdark", save_uncertainty=False
     if max_num_frames > 0:
         dark_list[max_num_frames:] = []
 
-    if len(dark_list) > 0:
+    if len(dark_list) >= min_num_frames:
         darks = ccdproc.Combiner(dark_list, dtype=np.float32)
         # apply exposure-time scaling before combining:
         darks.scaling = [1/dark.header["EXPTIME"] for dark in dark_list]
@@ -74,7 +74,7 @@ def create_master_dark(imlist, bias=[], filename="mdark", save_uncertainty=False
 
 
 def create_master_flat(imlist, bias=[], dark=[], filt="", filename="mflat", save_uncertainty=False, is_overwrite=True,
-                       max_num_frames=-1, log=None, **kwargs):
+                       min_num_frames=5, max_num_frames=-1, log=None, **kwargs):
     if log is None:
         log = logging.getLogger(__name__)
 
@@ -109,7 +109,7 @@ def create_master_flat(imlist, bias=[], dark=[], filt="", filename="mflat", save
             flat_list[max_num_frames:] = []
 
         log.debug(f"Flat {filt} list contains {len(flat_list)} files.")
-        if len(flat_list) > 0:
+        if len(flat_list) >= min_num_frames:
             flats = ccdproc.Combiner(flat_list, dtype=np.float32)
             # apply exposure-time scaling before combining:
             flats.scaling = [1 / np.mean(flat) for flat in flat_list]
@@ -152,6 +152,7 @@ def create_masters(year=datetime.date.today().year, month=datetime.date.today().
     day_shift[0::2] = a
     day_shift[1::2] = b
 
+    min_num_frames = config.getint("CAL", "MIN_NUM_FRAMES")
     max_num_frames = config.getint("CAL", "MAX_NUM_FRAMES")
     save_uncertainty = config.getboolean("GENERAL", "SAVE_UNCERTAINTY")
     is_overwrite = config.getboolean("CAL", "OVERWRITE")
@@ -181,7 +182,7 @@ def create_masters(year=datetime.date.today().year, month=datetime.date.today().
         file_exists = os.path.isfile(bias_file + ".fits")
         if (not file_exists) | (file_exists & is_overwrite):
             bias = create_master_bias(imlist, filename=bias_file, save_uncertainty=save_uncertainty,
-                                      max_num_frames=max_num_frames, log=log, **keys)
+                                      min_num_frames=min_num_frames, max_num_frames=max_num_frames, log=log, **keys)
         else:
             log.debug(f"Master bias exists, skipping.")
             bias = ccdproc.CCDData.read(bias_file + ".fits")
@@ -203,7 +204,7 @@ def create_masters(year=datetime.date.today().year, month=datetime.date.today().
         file_exists = os.path.isfile(dark_file + ".fits")
         if (not file_exists) | (file_exists & is_overwrite):
             dark = create_master_dark(imlist, bias, filename=dark_file, save_uncertainty=save_uncertainty,
-                                      max_num_frames=max_num_frames, log=log, **keys)
+                                      min_num_frames=min_num_frames, max_num_frames=max_num_frames, log=log, **keys)
         else:
             log.debug(f"Master dark exists, skipping.")
             dark = ccdproc.CCDData.read(dark_file + ".fits")
@@ -222,7 +223,8 @@ def create_masters(year=datetime.date.today().year, month=datetime.date.today().
 
         flat_file = f"{cal_archive_path}Flat{base_filename}"
         create_master_flat(imlist, bias, dark, filename=flat_file, save_uncertainty=save_uncertainty,
-                           is_overwrite=is_overwrite, max_num_frames=max_num_frames, log=log, **keys)
+                           is_overwrite=is_overwrite, min_num_frames=min_num_frames, max_num_frames=max_num_frames,
+                           log=log, **keys)
 
 
 def get_calframes(year, month, day, filt, ccd_str, telescope="C28", instrument="FLI-PL16801", log=None, config_file="config.ini"):
