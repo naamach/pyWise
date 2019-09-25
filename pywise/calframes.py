@@ -32,7 +32,7 @@ def create_master_bias(imlist, filename="mbias", save_uncertainty=False, min_num
         log.info(f"Master bias created and saved in {filename}.fits")
     else:
         master_bias = ccdproc.CCDData(data=[], unit=u.adu)
-        log.warning(f"No raw bias frames found for {filename}!")
+        log.warning(f"Not enough raw bias frames found for {filename}!  (found {len(bias_list)} frames)")
 
     return master_bias
 
@@ -68,7 +68,7 @@ def create_master_dark(imlist, bias=[], filename="mdark", save_uncertainty=False
         log.info(f"Master dark created and saved in {filename}.fits")
     else:
         master_dark = ccdproc.CCDData(data=[], unit=u.adu)
-        log.warning(f"No raw dark frames found for {filename}!")
+        log.warning(f"Not enough raw dark frames found for {filename}!  (found {len(dark_list)} frames)")
 
     return master_dark
 
@@ -83,7 +83,7 @@ def create_master_flat(imlist, bias=[], dark=[], filt="", filename="mflat", save
             filt_idx = ~imlist.summary["filter"].mask  # images with unmasked filter
             filters = np.unique(imlist.summary[filt_idx]["filter"])
         else:
-            log.warning(f"No raw flat frames found for {filename}!")
+            log.warning(f"Not enough raw flat frames found for {filename}! (found {len(filt)} frames)")
             return
     else:
         filters = filt
