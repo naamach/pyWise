@@ -100,6 +100,12 @@ from pywise import wise
 wise.reduce_night(2019, 5, 29, "C28")
 ```
 
+or (note the "s" in `reduce_nights`!):
+```
+from pywise import wise
+wise.reduce_nights("20190529", telescope="C28")
+```
+
 To reduce all the images taken by the C28 between 2019 May 29 and May 30, run:
 
 ```
