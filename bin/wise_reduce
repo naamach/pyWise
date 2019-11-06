@@ -41,11 +41,7 @@ def main(argv):
 
     telescope = args[-1]
 
-    if d2:
-        reduce_nights(d1, d2, telescope, config_file=config_file)
-    else:
-        print(d1)
-        reduce_night(d1.year, d1.month, d1.day, telescope, config_file=config_file)
+    reduce_nights(d1, d2, telescope, config_file=config_file)
 
 
 if __name__ == '__main__':
