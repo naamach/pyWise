@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-from pywise.wise import reduce_night
-from pywise.utils import daterange
+from pywise.wise import reduce_night, reduce_nights
 import sys
 import getopt
-import datetime
 
 
 def usage():
@@ -35,18 +33,16 @@ def main(argv):
             usage()
             sys.exit(2)
         elif opt in ("-f", "--from"):
-            d1 = datetime.datetime.strptime(arg, "%Y%m%d")
+            d1 = arg
         elif opt in ("-t", "--to"):
-            d2 = datetime.datetime.strptime(arg, "%Y%m%d")
+            d2 = arg
         elif opt in ("-c", "--config"):
             config_file = arg
 
     telescope = args[-1]
 
     if d2:
-        for day in daterange(d1, d2):
-            print(day)
-            reduce_night(day.year, day.month, day.day, telescope, config_file=config_file)
+        reduce_nights(d1, d2, telescope, config_file=config_file)
     else:
         print(d1)
         reduce_night(d1.year, d1.month, d1.day, telescope, config_file=config_file)
