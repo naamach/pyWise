@@ -2,6 +2,7 @@ import numpy as np
 from configparser import ConfigParser
 import logging
 import os
+import datetime
 
 
 def get_config(config_file="config.ini"):
@@ -97,3 +98,8 @@ def get_ccd_str(ccd_shape, idx=0):
     ccd_str = f"""x{ccd_shape["x_subframe"]}-{ccd_shape["x_naxis"]}_{ccd_shape["x_bin"]}bin""" \
               f"""_y{ccd_shape["y_subframe"]}-{ccd_shape["y_naxis"]}_{ccd_shape["y_bin"]}bin"""
     return ccd_str
+
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days) + 1):
+        yield start_date + datetime.timedelta(n)

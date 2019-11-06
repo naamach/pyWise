@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from pywise.wise import reduce_night
+from pywise.utils import daterange
 import sys
 import getopt
 import datetime
@@ -17,11 +18,6 @@ def usage():
     parser.add_argument("telescope", help="telescope", choices=["1m", "C28", "C18"])
     parser.add_argument("-c", "--config", metavar="config_file", help="path to config.ini file (default: config.ini)", default="config.ini")
     args = parser.parse_args()
-
-
-def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days) + 1):
-        yield start_date + datetime.timedelta(n)
 
 
 def main(argv):
