@@ -112,6 +112,6 @@ def reduce_nights(d1, d2=None, telescope="C28", config_file="config.ini"):
     """
     d1 and d2 should be in the format "YYYYMMDD"
     """
-    reduced_path = daterange_func(d1, d2, func=reduce_night, telescope=telescope, config_file=config_file)
+    daterange_func(d1, d2, func=reduce_night, telescope=telescope, config_file=config_file)
 
-    return reduced_path
+    return
