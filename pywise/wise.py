@@ -105,13 +105,13 @@ def reduce_night(year=datetime.date.today().year, month=datetime.date.today().mo
 
     close_log(log)
 
-    return
+    return reduced_path
 
 
 def reduce_nights(d1, d2=None, telescope="C28", config_file="config.ini"):
     """
     d1 and d2 should be in the format "YYYYMMDD"
     """
-    daterange_func(d1, d2, func=reduce_night, telescope=telescope, config_file=config_file)
+    reduced_path = daterange_func(d1, d2, func=reduce_night, telescope=telescope, config_file=config_file)
 
-    return
+    return reduced_path
