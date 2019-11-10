@@ -6,7 +6,7 @@ import ccdproc
 import numpy as np
 from astropy import units as u
 import datetime
-from pywise.utils import get_config, init_log, close_log, daterange
+from pywise.utils import get_config, init_log, close_log, daterange_func
 
 
 def reduce_night(year=datetime.date.today().year, month=datetime.date.today().month, day=datetime.date.today().day,
@@ -112,13 +112,6 @@ def reduce_nights(d1, d2=None, telescope="C28", config_file="config.ini"):
     """
     d1 and d2 should be in the format "YYYYMMDD"
     """
-    d1 = datetime.datetime.strptime(d1, "%Y%m%d")
-    if d2 is not None:
-        d2 = datetime.datetime.strptime(d2, "%Y%m%d")
-    else:
-        d2 = d1
-    for day in daterange(d1, d2):
-        print(day)
-        reduce_night(day.year, day.month, day.day, telescope, config_file=config_file)
+    daterange_func(d1, d2, func=reduce_night, telescope=telescope, config_file=config_file)
 
     return

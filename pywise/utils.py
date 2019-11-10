@@ -3,6 +3,7 @@ from configparser import ConfigParser
 import logging
 import os
 import datetime
+from pywise.wise import reduce_night
 
 
 def get_config(config_file="config.ini"):
@@ -103,3 +104,19 @@ def get_ccd_str(ccd_shape, idx=0):
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days) + 1):
         yield start_date + datetime.timedelta(n)
+
+
+def daterange_func(d1, d2=None, func=reduce_night, *args, **kwargs):
+    """
+    d1 and d2 should be in the format "YYYYMMDD"
+    """
+    d1 = datetime.datetime.strptime(d1, "%Y%m%d")
+    if d2 is not None:
+        d2 = datetime.datetime.strptime(d2, "%Y%m%d")
+    else:
+        d2 = d1
+    for day in daterange(d1, d2):
+        print(day)
+        func(day.year, day.month, day.day, *args, **kwargs)
+
+    return
