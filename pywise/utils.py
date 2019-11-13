@@ -3,7 +3,6 @@ from configparser import ConfigParser
 import logging
 import os
 import datetime
-from pywise.wise import reduce_night
 
 
 def get_config(config_file="config.ini"):
@@ -106,7 +105,7 @@ def daterange(start_date, end_date):
         yield start_date + datetime.timedelta(n)
 
 
-def daterange_func(d1, d2=None, func=reduce_night, *args, **kwargs):
+def daterange_func(d1, d2, func, *args, **kwargs):
     """
     d1 and d2 should be in the format "YYYYMMDD"
     """
